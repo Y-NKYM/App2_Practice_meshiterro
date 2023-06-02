@@ -1,5 +1,20 @@
 class PostImage < ApplicationRecord
   has_one_attached :image
-  
   belongs_to :user
+
+  def get_image
+    # if image.attached?
+    #   image
+    # else
+    #   'no_image.jpg'
+    # end
+    unless image.attached?
+      file_path = Rails.root.join('app/assets/images/no_image.jpg')
+      image.attach(
+        io: File.open(file_path),  #InputOutputオブジェクト
+        filename: 'default-image.jpg',  #Imageに設定する名前
+        content_type: 'image/jpeg')  #ファイルタイプ
+    end
+    image
+  end
 end
